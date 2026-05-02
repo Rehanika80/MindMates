@@ -1,0 +1,6 @@
+{
+  "ignore": [
+    "backend/data/**",
+    "**/dev-users.json"
+  ]
+}

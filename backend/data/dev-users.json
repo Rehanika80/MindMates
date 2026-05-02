@@ -1,0 +1,22 @@
+{
+  "users": [
+    {
+      "_id": "dev_1777660792950_hkzooaop",
+      "name": "Test User",
+      "email": "test@example.com",
+      "passwordHash": "$2a$10$TpNiQj2gTZ70OUU2KYp4PewPrRqF.BXsrOX7xHaSwQ93P9f1c06gq",
+      "role": "user",
+      "createdAt": "2026-05-01T18:39:52.950Z",
+      "updatedAt": "2026-05-01T18:39:52.953Z"
+    },
+    {
+      "_id": "dev_1777660842421_ht6dpq1q",
+      "name": "Test User",
+      "email": "test20260502001042@example.com",
+      "passwordHash": "$2a$10$Q.CQD1vrZAqMP3Ilw8JAU.xeo7fgiFPThxoeEcMX1h34vBj9v0ikS",
+      "role": "user",
+      "createdAt": "2026-05-01T18:40:42.421Z",
+      "updatedAt": "2026-05-01T18:40:42.423Z"
+    }
+  ]
+}
