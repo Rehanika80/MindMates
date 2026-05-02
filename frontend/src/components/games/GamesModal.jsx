@@ -3,14 +3,71 @@ import BubbleShot from './BubbleShot'
 import Piano from './Piano'
 import RainGame from './RainGame'
 import Quiz from './Quiz'
+import MandalaArt from './MandalaArt'
+import ZenSand from './ZenSand'
+import FlappyFocus from './FlappyFocus'
+
+const gameCatalog = [
+  {
+    id: 'bubble-shot',
+    name: 'Bubble Popup',
+    description: 'Pop floating bubbles for a quick playful reset.',
+    duration: '3-5 min',
+    benefit: 'Light focus',
+    label: 'Pop',
+  },
+  {
+    id: 'rain',
+    name: 'Rain Catch',
+    description: 'Catch falling raindrops and settle your attention.',
+    duration: '3-5 min',
+    benefit: 'Stress release',
+    label: 'Rain',
+  },
+  {
+    id: 'piano',
+    name: 'Rain and Piano',
+    description: 'Play gentle notes for a calm musical break.',
+    duration: '5-10 min',
+    benefit: 'Relaxation',
+    label: 'Piano',
+  },
+  {
+    id: 'mandala-art',
+    name: 'Mandala Art',
+    description: 'Create symmetrical mindful patterns.',
+    duration: '5-10 min',
+    benefit: 'Creative calm',
+    label: 'Art',
+  },
+  {
+    id: 'zen-sand',
+    name: 'Zen Sand',
+    description: 'Draw soothing sand trails and smooth them away.',
+    duration: '3-5 min',
+    benefit: 'Grounding',
+    label: 'Zen',
+  },
+  {
+    id: 'flappy-focus',
+    name: 'Flappy Focus',
+    description: 'Fly through focus gates with steady timing.',
+    duration: '3-5 min',
+    benefit: 'Attention rhythm',
+    label: 'Fly',
+  },
+  {
+    id: 'quiz',
+    name: 'Quick Quiz',
+    description: 'Answer short trivia questions to wake up your brain.',
+    duration: '5-10 min',
+    benefit: 'Memory boost',
+    label: 'Quiz',
+  },
+]
 
 const GamesModal = ({ gameRecommendations = [], emotion = 'Calm', onClose }) => {
-  const [selectedGame, setSelectedGame] = useState(null)
   const [activeGame, setActiveGame] = useState(null)
-
-  const handleGameClick = (gameId) => {
-    setActiveGame(gameId)
-  }
 
   const handleGameClose = () => {
     setActiveGame(null)
@@ -26,6 +83,12 @@ const GamesModal = ({ gameRecommendations = [], emotion = 'Calm', onClose }) => 
         return <RainGame onClose={handleGameClose} emotion={emotion} />
       case 'quiz':
         return <Quiz onClose={handleGameClose} emotion={emotion} />
+      case 'mandala-art':
+        return <MandalaArt onClose={handleGameClose} emotion={emotion} />
+      case 'zen-sand':
+        return <ZenSand onClose={handleGameClose} emotion={emotion} />
+      case 'flappy-focus':
+        return <FlappyFocus onClose={handleGameClose} emotion={emotion} />
       default:
         return null
     }
@@ -35,61 +98,58 @@ const GamesModal = ({ gameRecommendations = [], emotion = 'Calm', onClose }) => 
     return renderGame()
   }
 
+  const mergedGames = [
+    ...gameRecommendations.map((game) => ({
+      ...game,
+      label: game.label || game.emoji || 'Play',
+    })),
+    ...gameCatalog.filter((game) => !gameRecommendations.some((recommended) => recommended.id === game.id)),
+  ]
+
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-      <div className="w-full max-w-4xl bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 rounded-lg p-8 border border-purple-400/20 shadow-2xl max-h-96 overflow-y-auto">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
+      <div className="max-h-[90vh] w-full max-w-5xl overflow-y-auto rounded-lg border border-purple-400/20 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-8 shadow-2xl">
+        <div className="mb-8 flex items-center justify-between gap-4">
           <div>
-            <h2 className="text-4xl font-bold text-white mb-2">🎮 Recommended Games</h2>
-            <p className="text-slate-300">
-              Based on your <span className="text-cyan-300 font-semibold">{emotion}</span> mood
+            <h2 className="text-4xl font-bold text-white">Mind Games</h2>
+            <p className="mt-2 text-slate-300">
+              Recommended for your <span className="font-semibold text-cyan-300">{emotion}</span> mood, plus the full game library.
             </p>
           </div>
-          <button
-            onClick={onClose}
-            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 font-semibold"
-          >
+          <button onClick={onClose} className="rounded-lg bg-red-500 px-4 py-2 font-semibold text-white hover:bg-red-600">
             Close
           </button>
         </div>
 
-        {/* Games Grid */}
-        {gameRecommendations && gameRecommendations.length > 0 ? (
-          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
-            {gameRecommendations.map((game) => (
-              <div
-                key={game.id}
-                onClick={() => handleGameClick(game.id)}
-                className="group cursor-pointer rounded-lg border-2 border-purple-400/30 bg-gradient-to-br from-purple-400/10 to-purple-500/5 p-6 transition hover:border-purple-400/60 hover:bg-gradient-to-br hover:from-purple-400/20 hover:to-purple-500/10 hover:shadow-lg hover:shadow-purple-500/20 transform hover:scale-105"
-              >
-                <div className="text-5xl mb-4">{game.emoji}</div>
-                <h3 className="text-2xl font-bold text-white mb-2">{game.name}</h3>
-                <p className="text-slate-300 mb-4">{game.description}</p>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-slate-400">⏱️ Duration:</span>
-                    <span className="text-cyan-300 font-semibold">{game.duration}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-slate-400">💡 Benefit:</span>
-                    <span className="text-green-300 font-semibold">{game.benefit}</span>
-                  </div>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {mergedGames.map((game) => (
+            <button
+              key={game.id}
+              type="button"
+              onClick={() => setActiveGame(game.id)}
+              className="group rounded-lg border-2 border-purple-400/30 bg-gradient-to-br from-purple-400/10 to-purple-500/5 p-6 text-left transition hover:scale-[1.02] hover:border-purple-400/60 hover:from-purple-400/20 hover:to-purple-500/10 hover:shadow-lg hover:shadow-purple-500/20"
+            >
+              <span className="mb-4 inline-flex rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-sm font-bold text-cyan-200">
+                {game.label}
+              </span>
+              <h3 className="text-2xl font-bold text-white">{game.name}</h3>
+              <p className="mt-3 min-h-16 text-sm leading-6 text-slate-300">{game.description}</p>
+              <div className="mt-5 space-y-2 text-sm">
+                <div className="flex justify-between gap-3">
+                  <span className="text-slate-400">Duration</span>
+                  <span className="font-semibold text-cyan-300">{game.duration}</span>
                 </div>
-                <button className="mt-6 w-full px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg font-semibold hover:from-cyan-600 hover:to-blue-600 transition opacity-0 group-hover:opacity-100">
-                  Play Now
-                </button>
+                <div className="flex justify-between gap-3">
+                  <span className="text-slate-400">Benefit</span>
+                  <span className="font-semibold text-green-300">{game.benefit}</span>
+                </div>
               </div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-xl text-slate-300 mb-4">
-              No specific games recommended for this mood right now.
-            </p>
-            <p className="text-slate-400">Try any game you like to improve your mood!</p>
-          </div>
-        )}
+              <span className="mt-6 block rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-2 text-center font-semibold text-white opacity-90 transition group-hover:opacity-100">
+                Play Now
+              </span>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   )

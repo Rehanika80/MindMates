@@ -2,6 +2,22 @@
 const GAME_LIBRARY = {
   Calm: [
     {
+      id: 'zen-sand',
+      name: 'Zen Sand',
+      description: 'Draw calming sand trails and reset your breathing',
+      duration: '3-5 min',
+      benefit: 'Grounding and calm',
+      emoji: 'Zen',
+    },
+    {
+      id: 'mandala-art',
+      name: 'Mandala Art',
+      description: 'Create symmetrical mindful patterns',
+      duration: '5-10 min',
+      benefit: 'Creative relaxation',
+      emoji: 'Art',
+    },
+    {
       id: 'piano',
       name: 'Piano Master',
       description: 'Play relaxing melodies on the piano',
@@ -28,6 +44,14 @@ const GAME_LIBRARY = {
       emoji: '🫧',
     },
     {
+      id: 'flappy-focus',
+      name: 'Flappy Focus',
+      description: 'Guide your focus through gentle gates',
+      duration: '3-5 min',
+      benefit: 'Quick reflex boost',
+      emoji: 'Fly',
+    },
+    {
       id: 'quiz',
       name: 'Quick Quiz',
       description: 'Answer fun trivia questions',
@@ -38,6 +62,14 @@ const GAME_LIBRARY = {
   ],
   Focused: [
     {
+      id: 'flappy-focus',
+      name: 'Flappy Focus',
+      description: 'Keep steady rhythm through focus gates',
+      duration: '3-5 min',
+      benefit: 'Attention and timing',
+      emoji: 'Fly',
+    },
+    {
       id: 'quiz',
       name: 'Quick Quiz',
       description: 'Challenge your brain with trivia',
@@ -47,6 +79,14 @@ const GAME_LIBRARY = {
     },
   ],
   Stressed: [
+    {
+      id: 'zen-sand',
+      name: 'Zen Sand',
+      description: 'Slowly draw, breathe, and smooth the sand',
+      duration: '3-5 min',
+      benefit: 'Release tension',
+      emoji: 'Zen',
+    },
     {
       id: 'rain',
       name: 'Rain Drops',
@@ -66,6 +106,14 @@ const GAME_LIBRARY = {
   ],
   Tired: [
     {
+      id: 'mandala-art',
+      name: 'Mandala Art',
+      description: 'Low-pressure pattern making',
+      duration: '5-10 min',
+      benefit: 'Gentle creative recharge',
+      emoji: 'Art',
+    },
+    {
       id: 'piano',
       name: 'Piano Master',
       description: 'Play relaxing melodies',
@@ -83,6 +131,14 @@ const GAME_LIBRARY = {
     },
   ],
   Sad: [
+    {
+      id: 'mandala-art',
+      name: 'Mandala Art',
+      description: 'Build a bright repeating pattern',
+      duration: '5-10 min',
+      benefit: 'Positive creative expression',
+      emoji: 'Art',
+    },
     {
       id: 'quiz',
       name: 'Quick Quiz',
@@ -180,6 +236,11 @@ export const getGameConfig = (gameId) => {
   return allGames.find((game) => game.id === gameId)
 }
 
+export const getAllGames = () => {
+  const games = Object.values(GAME_LIBRARY).flat()
+  return [...new Map(games.map((game) => [game.id, game])).values()]
+}
+
 export const generateQuizSession = () => {
   return getRandomQuizQuestions(5)
 }
@@ -197,6 +258,7 @@ export const createGameRecommendation = (emotion, intensity) => {
 export default {
   getGamesForMood,
   getGameConfig,
+  getAllGames,
   generateQuizSession,
   createGameRecommendation,
   QUIZ_QUESTIONS,

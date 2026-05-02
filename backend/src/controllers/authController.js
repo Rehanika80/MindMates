@@ -1,5 +1,13 @@
 import User from '../models/User.js'
 import { generateToken } from '../middleware/authMiddleware.js'
+import mongoose from 'mongoose'
+import {
+  createDevUser,
+  findDevUserByEmail,
+  validateDevUserPassword,
+} from '../utils/devUserStore.js'
+
+const isDatabaseReady = () => mongoose.connection.readyState === 1
 
 const sanitizeUser = (user) => ({
   _id: user._id,
@@ -18,6 +26,34 @@ export const register = async (req, res) => {
         success: false,
         message: 'Name, email, and password are required',
       })
+    }
+
+    if (!isDatabaseReady()) {
+      try {
+        const user = await createDevUser({
+          name,
+          email,
+          password,
+          role: adminCode && adminCode === process.env.ADMIN_CODE ? 'admin' : 'user',
+        })
+        const token = generateToken(user._id)
+
+        return res.status(201).json({
+          success: true,
+          message: 'Account created successfully',
+          token,
+          user,
+        })
+      } catch (error) {
+        if (error.code === 'DUPLICATE_USER') {
+          return res.status(409).json({
+            success: false,
+            message: error.message,
+          })
+        }
+
+        throw error
+      }
     }
 
     const existingUser = await User.findOne({ email: email.toLowerCase() })
@@ -61,6 +97,28 @@ export const login = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: 'Email and password are required',
+      })
+    }
+
+    if (!isDatabaseReady()) {
+      const user = findDevUserByEmail(email)
+      const isPasswordValid = await validateDevUserPassword(user, password)
+
+      if (!user || !isPasswordValid) {
+        return res.status(401).json({
+          success: false,
+          message: 'Invalid credentials',
+        })
+      }
+
+      const safeUser = sanitizeUser(user)
+      const token = generateToken(safeUser._id)
+
+      return res.json({
+        success: true,
+        message: 'Login successful',
+        token,
+        user: safeUser,
       })
     }
 

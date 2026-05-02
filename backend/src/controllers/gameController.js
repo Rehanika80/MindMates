@@ -1,5 +1,14 @@
 import GameSession from '../models/GameSession.js'
 import gameEngine from '../utils/gameEngine.js'
+import mongoose from 'mongoose'
+import { calculateGrowthStats } from '../utils/growthSystem.js'
+import {
+  createDevGameSession,
+  findDevGameSessionsByUser,
+  findDevLeaderboard,
+} from '../utils/devGameStore.js'
+
+const isDatabaseReady = () => mongoose.connection.readyState === 1
 
 export const getGameRecommendations = async (req, res) => {
   try {
@@ -47,6 +56,26 @@ export const logGameSession = async (req, res) => {
       })
     }
 
+    if (!isDatabaseReady()) {
+      const gameSession = createDevGameSession({
+        user: req.user._id,
+        gameId,
+        gameName: gameConfig.name,
+        score: score || 0,
+        duration: duration || 0,
+        emotion: emotion || 'Calm',
+        difficulty: difficulty || 'normal',
+      })
+      const sessions = findDevGameSessionsByUser(req.user._id)
+
+      return res.json({
+        success: true,
+        message: 'Game session recorded',
+        data: gameSession,
+        growth: calculateGrowthStats(sessions),
+      })
+    }
+
     const gameSession = new GameSession({
       user: req.user._id,
       gameId,
@@ -64,6 +93,7 @@ export const logGameSession = async (req, res) => {
       success: true,
       message: 'Game session recorded',
       data: gameSession,
+      growth: calculateGrowthStats([gameSession]),
     })
   } catch (error) {
     console.error('logGameSession Error:', error)
@@ -76,6 +106,31 @@ export const logGameSession = async (req, res) => {
 
 export const getUserGameStats = async (req, res) => {
   try {
+    if (!isDatabaseReady()) {
+      const gameSessions = findDevGameSessionsByUser(req.user._id)
+      const totalGamesPlayed = gameSessions.length
+      const totalScore = gameSessions.reduce((sum, session) => sum + (session.score || 0), 0)
+      const averageScore = totalGamesPlayed > 0 ? Math.round(totalScore / totalGamesPlayed) : 0
+      const averageDuration =
+        totalGamesPlayed > 0
+          ? Math.round(gameSessions.reduce((sum, session) => sum + (session.duration || 0), 0) / totalGamesPlayed)
+          : 0
+
+      return res.json({
+        success: true,
+        message: 'Game stats retrieved',
+        data: {
+          totalGamesPlayed,
+          totalScore,
+          averageScore,
+          averageDuration,
+          recentSessions: gameSessions.slice(0, 10),
+          gameStats: [],
+          growth: calculateGrowthStats(gameSessions),
+        },
+      })
+    }
+
     const gameSessions = await GameSession.find({
       user: req.user._id,
     })
@@ -120,6 +175,7 @@ export const getUserGameStats = async (req, res) => {
         averageDuration,
         recentSessions: gameSessions.slice(0, 10),
         gameStats: Object.values(gameStats),
+        growth: calculateGrowthStats(gameSessions),
       },
     })
   } catch (error) {
@@ -139,6 +195,14 @@ export const getGameLeaderboard = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: 'Game ID is required',
+      })
+    }
+
+    if (!isDatabaseReady()) {
+      return res.json({
+        success: true,
+        message: 'Leaderboard retrieved',
+        data: findDevLeaderboard(gameId),
       })
     }
 

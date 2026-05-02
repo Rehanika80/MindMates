@@ -57,6 +57,10 @@ const checkInSchema = new mongoose.Schema(
       trim: true,
       default: '',
     },
+    gameRecommendations: {
+      type: [Object],
+      default: [],
+    },
   },
   {
     timestamps: true,

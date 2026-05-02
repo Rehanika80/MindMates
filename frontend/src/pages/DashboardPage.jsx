@@ -20,6 +20,7 @@ const DashboardPage = () => {
 
   const [checkIns, setCheckIns] = useState([])
   const [overview, setOverview] = useState(null)
+  const [gameStats, setGameStats] = useState(null)
   const [statusMessage, setStatusMessage] = useState('Loading dashboard...')
   const [loading, setLoading] = useState(false)
   const [supportLoading, setSupportLoading] = useState(false)
@@ -48,9 +49,11 @@ const DashboardPage = () => {
         apiRequest('/checkins/mine'),
         apiRequest('/dashboard/overview'),
       ])
+      const statsData = await apiRequest('/games/stats')
 
       setCheckIns(checkInData.data || [])
       setOverview(overviewData.data || null)
+      setGameStats(statsData.data || null)
       setStatusMessage(overviewData.message || 'Dashboard ready')
     } catch (error) {
       setStatusMessage(error.message)
@@ -174,6 +177,16 @@ const DashboardPage = () => {
   const minutes = Math.floor(remainingSeconds / 60)
   const seconds = String(remainingSeconds % 60).padStart(2, '0')
   const latestCheckIn = overview?.latestCheckIn || checkIns[0] || null
+  const growth = gameStats?.growth || overview?.growth || {
+    xp: 0,
+    level: 1,
+    levelXp: 0,
+    nextLevelXp: 100,
+    progressPercent: 0,
+    streakDays: overview?.streakDays || 0,
+    rewards: [],
+    nextReward: null,
+  }
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950 px-6 py-12 lg:px-10">
@@ -250,6 +263,82 @@ const DashboardPage = () => {
                   <p className="text-sm text-cyan-100 font-medium">Recommended for your mood</p>
                 </button>
               )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Gamified Growth System */}
+      <section className="mx-auto mt-8 max-w-7xl">
+        <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="rounded-3xl border border-amber-400/20 bg-gradient-to-br from-amber-900/25 via-slate-900/45 to-slate-950/70 p-6 shadow-2xl">
+            <p className="inline-block rounded-full bg-amber-400/20 px-4 py-1 text-xs font-semibold uppercase tracking-wider text-amber-200">
+              Gamified Growth
+            </p>
+            <div className="mt-5 flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <h2 className="text-4xl font-black text-white">Level {growth.level}</h2>
+                <p className="mt-2 text-sm text-slate-300">{growth.xp} XP earned from games, focus, and check-ins.</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowGamesModal(true)}
+                className="rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-500 px-5 py-3 font-bold text-white transition hover:from-cyan-400 hover:to-blue-400"
+              >
+                Play Mind Games
+              </button>
+            </div>
+            <div className="mt-6">
+              <div className="mb-2 flex justify-between text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <span>{growth.levelXp} XP</span>
+                <span>{growth.nextLevelXp} XP to next level</span>
+              </div>
+              <div className="h-4 overflow-hidden rounded-full bg-slate-800">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-amber-400 via-cyan-400 to-emerald-400 transition-all"
+                  style={{ width: `${growth.progressPercent}%` }}
+                />
+              </div>
+            </div>
+            <div className="mt-5 grid grid-cols-3 gap-3">
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <p className="text-xs uppercase tracking-wider text-slate-400">Focus streak</p>
+                <p className="mt-2 text-2xl font-bold text-amber-200">{growth.streakDays} days</p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <p className="text-xs uppercase tracking-wider text-slate-400">Games played</p>
+                <p className="mt-2 text-2xl font-bold text-cyan-200">{gameStats?.totalGamesPlayed || 0}</p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <p className="text-xs uppercase tracking-wider text-slate-400">Avg score</p>
+                <p className="mt-2 text-2xl font-bold text-emerald-200">{gameStats?.averageScore || 0}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-emerald-400/20 bg-gradient-to-br from-emerald-900/25 via-slate-900/45 to-slate-950/70 p-6 shadow-2xl">
+            <p className="inline-block rounded-full bg-emerald-400/20 px-4 py-1 text-xs font-semibold uppercase tracking-wider text-emerald-200">
+              Rewards
+            </p>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              {growth.rewards.length > 0 ? (
+                growth.rewards.slice(0, 4).map((reward) => (
+                  <div key={reward.id} className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 p-4">
+                    <p className="font-bold text-white">{reward.title}</p>
+                    <p className="mt-1 text-sm leading-6 text-slate-300">{reward.description}</p>
+                  </div>
+                ))
+              ) : (
+                <div className="rounded-2xl border border-dashed border-white/15 bg-white/5 p-4 text-sm text-slate-300 sm:col-span-2">
+                  Play one mind game to unlock your first reward.
+                </div>
+              )}
+            </div>
+            <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+              <p className="text-xs uppercase tracking-wider text-slate-400">Next reward</p>
+              <p className="mt-2 font-semibold text-white">
+                {growth.nextReward ? `${growth.nextReward.title} at ${growth.nextReward.minXp} XP` : 'All current rewards unlocked'}
+              </p>
             </div>
           </div>
         </div>
@@ -617,7 +706,10 @@ const DashboardPage = () => {
         <GamesModal
           gameRecommendations={latestCheckIn?.gameRecommendations || []}
           emotion={latestCheckIn?.detectedEmotion || overview?.topEmotion || 'Calm'}
-          onClose={() => setShowGamesModal(false)}
+          onClose={() => {
+            setShowGamesModal(false)
+            loadDashboardData()
+          }}
         />
       )}
 

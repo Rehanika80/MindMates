@@ -28,9 +28,33 @@ const parseFrontendOrigins = () => {
 const allowedOrigins = parseFrontendOrigins()
 console.log('CORS allowed origins:', allowedOrigins)
 
+const isAllowedDevOrigin = (origin) => {
+  if (!origin) {
+    return true
+  }
+
+  if (allowedOrigins.includes(origin)) {
+    return true
+  }
+
+  try {
+    const { hostname, protocol } = new URL(origin)
+    return protocol === 'http:' && ['localhost', '127.0.0.1'].includes(hostname)
+  } catch {
+    return false
+  }
+}
+
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin(origin, callback) {
+      if (isAllowedDevOrigin(origin)) {
+        callback(null, true)
+        return
+      }
+
+      callback(new Error(`CORS blocked origin: ${origin}`))
+    },
     credentials: true,
   }),
 )

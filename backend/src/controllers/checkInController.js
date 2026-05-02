@@ -1,8 +1,20 @@
 import CheckIn from '../models/CheckIn.js'
 import { analyzeCheckIn } from '../utils/mindmateEngine.js'
+import mongoose from 'mongoose'
+import { createDevCheckIn, findDevCheckInsByUser, findPublicDevCheckIns } from '../utils/devCheckInStore.js'
+
+const isDatabaseReady = () => mongoose.connection.readyState === 1
 
 export const getCheckIns = async (req, res) => {
   try {
+    if (!isDatabaseReady()) {
+      return res.json({
+        success: true,
+        message: 'Check-ins loaded',
+        data: findPublicDevCheckIns(),
+      })
+    }
+
     const checkIns = await CheckIn.find({ user: null }).sort({ createdAt: -1 }).limit(5)
 
     return res.json({
@@ -36,7 +48,7 @@ export const createCheckIn = async (req, res) => {
       intensity: Number(intensity) || 3,
     })
 
-    const checkIn = await CheckIn.create({
+    const payload = {
       user: req.user?._id || null,
       name,
       mood,
@@ -48,7 +60,10 @@ export const createCheckIn = async (req, res) => {
       supportSuggestion: analysis.supportSuggestion,
       insightTags: analysis.insightTags,
       productivityCue: analysis.productivityCue,
-    })
+      gameRecommendations: analysis.gameRecommendations || [],
+    }
+
+    const checkIn = isDatabaseReady() ? await CheckIn.create(payload) : createDevCheckIn(payload)
 
     return res.status(201).json({
       success: true,
@@ -66,6 +81,14 @@ export const createCheckIn = async (req, res) => {
 
 export const getMyCheckIns = async (req, res) => {
   try {
+    if (!isDatabaseReady()) {
+      return res.json({
+        success: true,
+        message: 'Personal check-ins loaded',
+        data: findDevCheckInsByUser(req.user._id),
+      })
+    }
+
     const checkIns = await CheckIn.find({ user: req.user._id }).sort({ createdAt: -1 }).limit(10)
 
     return res.json({
