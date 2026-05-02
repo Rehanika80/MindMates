@@ -189,24 +189,24 @@ const DashboardPage = () => {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950 px-6 py-12 lg:px-10">
+    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950 px-4 py-6 sm:px-6 sm:py-10 lg:px-10 lg:py-12">
       {/* Header Section */}
       <section className="mx-auto max-w-7xl">
-        <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+        <div className="grid gap-4 sm:gap-6 lg:grid-cols-[1.15fr_0.85fr]">
           {/* Welcome Card */}
-          <div className="group relative rounded-3xl border border-cyan-400/20 bg-gradient-to-br from-cyan-900/30 via-slate-900/40 to-slate-950/60 p-8 shadow-2xl transition hover:border-cyan-400/40 hover:shadow-cyan-900/50">
+          <div className="group relative rounded-2xl border border-cyan-400/20 bg-gradient-to-br from-cyan-900/30 via-slate-900/40 to-slate-950/60 p-5 shadow-2xl transition hover:border-cyan-400/40 hover:shadow-cyan-900/50 sm:rounded-3xl sm:p-8">
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-cyan-500/10 to-transparent opacity-0 transition group-hover:opacity-100" />
             <div className="relative z-10">
               <p className="inline-block rounded-full bg-cyan-400/20 px-4 py-1 text-xs font-semibold uppercase tracking-wider text-cyan-200">
                 🧠 Emotional Intelligence Dashboard
               </p>
-              <h1 className="mt-4 bg-gradient-to-r from-white via-cyan-100 to-cyan-200 bg-clip-text text-5xl font-bold text-transparent lg:text-6xl">
+              <h1 className="mt-3 bg-gradient-to-r from-white via-cyan-100 to-cyan-200 bg-clip-text text-3xl font-bold text-transparent sm:mt-4 sm:text-5xl lg:text-6xl">
                 Welcome, {auth.user?.name.split(' ')[0]}
               </h1>
-              <p className="mt-4 max-w-2xl text-lg text-slate-300">{statusMessage}</p>
+              <p className="mt-2 max-w-2xl text-sm text-slate-300 sm:mt-4 sm:text-lg">{statusMessage}</p>
               
               {/* Stats Grid */}
-              <div className="mt-8 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              <div className="mt-5 grid grid-cols-2 gap-2 sm:mt-8 sm:gap-3 xl:grid-cols-4">
                 <div className="group/card rounded-2xl border border-white/10 bg-gradient-to-br from-white/10 to-white/5 p-5 transition hover:border-white/20 hover:bg-gradient-to-br hover:from-white/20 hover:to-white/10">
                   <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">👤 Role</p>
                   <p className="mt-3 text-2xl font-bold text-white">{auth.user?.role}</p>
@@ -228,7 +228,7 @@ const DashboardPage = () => {
           </div>
 
           {/* Smart Insights Card */}
-          <div className="rounded-3xl border border-purple-400/20 bg-gradient-to-br from-purple-900/30 via-slate-900/40 to-slate-950/60 p-6 shadow-2xl">
+          <div className="rounded-2xl border border-purple-400/20 bg-gradient-to-br from-purple-900/30 via-slate-900/40 to-slate-950/60 p-5 shadow-2xl sm:rounded-3xl sm:p-6">
             <p className="inline-block rounded-full bg-purple-400/20 px-4 py-1 text-xs font-semibold uppercase tracking-wider text-purple-200">
               ✨ Smart Insights
             </p>
@@ -269,15 +269,15 @@ const DashboardPage = () => {
       </section>
 
       {/* Gamified Growth System */}
-      <section className="mx-auto mt-8 max-w-7xl">
-        <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="rounded-3xl border border-amber-400/20 bg-gradient-to-br from-amber-900/25 via-slate-900/45 to-slate-950/70 p-6 shadow-2xl">
+      <section className="mx-auto mt-4 max-w-7xl sm:mt-8">
+        <div className="grid gap-4 sm:gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="rounded-2xl border border-amber-400/20 bg-gradient-to-br from-amber-900/25 via-slate-900/45 to-slate-950/70 p-5 shadow-2xl sm:rounded-3xl sm:p-6">
             <p className="inline-block rounded-full bg-amber-400/20 px-4 py-1 text-xs font-semibold uppercase tracking-wider text-amber-200">
               Gamified Growth
             </p>
             <div className="mt-5 flex flex-wrap items-end justify-between gap-4">
               <div>
-                <h2 className="text-4xl font-black text-white">Level {growth.level}</h2>
+                <h2 className="text-3xl font-black text-white sm:text-4xl">Level {growth.level}</h2>
                 <p className="mt-2 text-sm text-slate-300">{growth.xp} XP earned from games, focus, and check-ins.</p>
               </div>
               <button
@@ -300,7 +300,7 @@ const DashboardPage = () => {
                 />
               </div>
             </div>
-            <div className="mt-5 grid grid-cols-3 gap-3">
+            <div className="mt-5 grid grid-cols-3 gap-2 sm:gap-3">
               <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                 <p className="text-xs uppercase tracking-wider text-slate-400">Focus streak</p>
                 <p className="mt-2 text-2xl font-bold text-amber-200">{growth.streakDays} days</p>
@@ -316,7 +316,7 @@ const DashboardPage = () => {
             </div>
           </div>
 
-          <div className="rounded-3xl border border-emerald-400/20 bg-gradient-to-br from-emerald-900/25 via-slate-900/45 to-slate-950/70 p-6 shadow-2xl">
+          <div className="rounded-2xl border border-emerald-400/20 bg-gradient-to-br from-emerald-900/25 via-slate-900/45 to-slate-950/70 p-5 shadow-2xl sm:rounded-3xl sm:p-6">
             <p className="inline-block rounded-full bg-emerald-400/20 px-4 py-1 text-xs font-semibold uppercase tracking-wider text-emerald-200">
               Rewards
             </p>
@@ -348,13 +348,13 @@ const DashboardPage = () => {
       <section className="mx-auto mt-12 max-w-7xl">
         <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
           {/* Detect Form */}
-          <form onSubmit={handleSubmit} className="group rounded-3xl border border-blue-400/20 bg-gradient-to-br from-blue-900/30 via-slate-900/40 to-slate-950/60 p-8 shadow-2xl transition hover:border-blue-400/40 hover:shadow-blue-900/40">
+          <form onSubmit={handleSubmit} className="group rounded-2xl border border-blue-400/20 bg-gradient-to-br from-blue-900/30 via-slate-900/40 to-slate-950/60 p-5 shadow-2xl transition hover:border-blue-400/40 hover:shadow-blue-900/40 sm:rounded-3xl sm:p-8">
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 transition group-hover:opacity-100" />
             <div className="relative z-10">
               <p className="inline-block rounded-full bg-blue-400/20 px-4 py-1 text-xs font-semibold uppercase tracking-wider text-blue-200">
                 🔍 Detect
               </p>
-              <h2 className="mt-4 text-3xl font-bold text-white">How are you feeling?</h2>
+              <h2 className="mt-3 text-xl font-bold text-white sm:mt-4 sm:text-3xl">How are you feeling?</h2>
               <p className="mt-2 text-sm text-slate-400">
                 Share your mood, intensity, and context. AI will generate a personalized action plan.
               </p>
@@ -363,7 +363,7 @@ const DashboardPage = () => {
                 {/* Mood Selector */}
                 <div>
                   <label className="block text-sm font-semibold text-slate-300 mb-3">Select your mood</label>
-                  <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
+                  <div className="grid grid-cols-3 gap-2">
                     {EMOTION_OPTIONS.map((emotion) => (
                       <button
                         key={emotion}
@@ -429,11 +429,11 @@ const DashboardPage = () => {
           </form>
 
           {/* Decide Analysis */}
-          <div className="group rounded-3xl border border-emerald-400/20 bg-gradient-to-br from-emerald-900/30 via-slate-900/40 to-slate-950/60 p-8 shadow-2xl transition hover:border-emerald-400/40 hover:shadow-emerald-900/40">
+          <div className="group rounded-2xl border border-emerald-400/20 bg-gradient-to-br from-emerald-900/30 via-slate-900/40 to-slate-950/60 p-5 shadow-2xl transition hover:border-emerald-400/40 hover:shadow-emerald-900/40 sm:rounded-3xl sm:p-8">
             <p className="inline-block rounded-full bg-emerald-400/20 px-4 py-1 text-xs font-semibold uppercase tracking-wider text-emerald-200">
               🎯 Decide
             </p>
-            <h2 className="mt-4 text-3xl font-bold text-white">AI Analysis & Insights</h2>
+            <h2 className="mt-3 text-xl font-bold text-white sm:mt-4 sm:text-3xl">AI Analysis & Insights</h2>
             
             <div className="mt-8 grid gap-4">
               {latestCheckIn ? (
@@ -497,13 +497,13 @@ const DashboardPage = () => {
       <section className="mx-auto mt-12 max-w-7xl">
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
           {/* Act - Focus Timer */}
-          <div className="group rounded-3xl border border-orange-400/20 bg-gradient-to-br from-orange-900/30 via-slate-900/40 to-slate-950/60 p-8 shadow-2xl transition hover:border-orange-400/40 hover:shadow-orange-900/40">
+          <div className="group rounded-2xl border border-orange-400/20 bg-gradient-to-br from-orange-900/30 via-slate-900/40 to-slate-950/60 p-5 shadow-2xl transition hover:border-orange-400/40 hover:shadow-orange-900/40 sm:rounded-3xl sm:p-8">
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 transition group-hover:opacity-100" />
             <div className="relative z-10">
               <p className="inline-block rounded-full bg-orange-400/20 px-4 py-1 text-xs font-semibold uppercase tracking-wider text-orange-200">
                 ⏱️ Act
               </p>
-              <h2 className="mt-4 text-3xl font-bold text-white">Focus Mode Timer</h2>
+              <h2 className="mt-3 text-xl font-bold text-white sm:mt-4 sm:text-3xl">Focus Mode Timer</h2>
               <p className="mt-2 text-sm text-slate-400">Execute your action plan with dedicated focus time.</p>
 
               {/* Timer Display */}
@@ -574,14 +574,14 @@ const DashboardPage = () => {
           </div>
 
           {/* Improve - AI Coach */}
-          <div className="group rounded-3xl border border-pink-400/20 bg-gradient-to-br from-pink-900/30 via-slate-900/40 to-slate-950/60 p-8 shadow-2xl transition hover:border-pink-400/40 hover:shadow-pink-900/40">
+          <div className="group rounded-2xl border border-pink-400/20 bg-gradient-to-br from-pink-900/30 via-slate-900/40 to-slate-950/60 p-5 shadow-2xl transition hover:border-pink-400/40 hover:shadow-pink-900/40 sm:rounded-3xl sm:p-8">
             <p className="inline-block rounded-full bg-pink-400/20 px-4 py-1 text-xs font-semibold uppercase tracking-wider text-pink-200">
               🤖 Improve
             </p>
-            <h2 className="mt-4 text-3xl font-bold text-white">AI Coach Chat</h2>
+            <h2 className="mt-3 text-xl font-bold text-white sm:mt-4 sm:text-3xl">AI Coach Chat</h2>
             <p className="mt-2 text-sm text-slate-400">Ask your coach for guidance, motivation & strategies.</p>
 
-            <div className="mt-6 grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
+            <div className="mt-4 grid gap-4 sm:mt-6 lg:grid-cols-[1.15fr_0.85fr]">
               {/* Chat Interface */}
               <div className="rounded-2xl border border-pink-400/20 bg-gradient-to-br from-pink-500/5 to-slate-950/50 p-5 flex flex-col">
                 {/* Messages */}
@@ -615,7 +615,7 @@ const DashboardPage = () => {
                 </div>
 
                 {/* Quick Prompts */}
-                <div className="mb-4 grid grid-cols-2 gap-2 border-t border-white/10 pt-4">
+                <div className="mb-3 grid grid-cols-1 gap-2 border-t border-white/10 pt-3 sm:grid-cols-2 sm:mb-4 sm:pt-4">
                   {QUICK_PROMPTS.map((prompt) => (
                     <button
                       key={prompt}
